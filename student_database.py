@@ -1,46 +1,6 @@
-students = []
+import database
 
-def add_student():
-    name = input("Enter student name: ")
-    roll_no = input("Enter roll number: ")
-    course = input("Enter course: ")
-
-    student = {
-        "name": name,
-        "roll_no": roll_no,
-        "course": course
-    }
-
-    students.append(student)
-    print("Student added successfully!")
-
-
-def view_students():
-    if not students:
-        print("No students found.")
-        return
-
-    print("\n--- Student Details ---")
-    for student in students:
-        print("Name:", student["name"])
-        print("Roll No:", student["roll_no"])
-        print("Course:", student["course"])
-        print("----------------------")
-
-
-def search_student():
-    roll_no = input("Enter roll number to search: ")
-
-    for student in students:
-        if student["roll_no"] == roll_no:
-            print("\nStudent Found!")
-            print("Name:", student["name"])
-            print("Roll No:", student["roll_no"])
-            print("Course:", student["course"])
-            return
-
-    print("Student not found.")
-
+database.create_table()
 
 while True:
     print("\n===== Student Database =====")
@@ -52,13 +12,44 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        add_student()
+        name = input("Enter student name: ")
+        roll_no = input("Enter roll number: ")
+        course = input("Enter course: ")
+
+        database.add_student(name, roll_no, course)
+        print("Student added successfully!")
+
     elif choice == "2":
-        view_students()
+        students = database.view_students()
+
+        if not students:
+            print("No students found.")
+        else:
+            print("\n--- Student Details ---")
+            for student in students:
+                print("ID:", student[0])
+                print("Name:", student[1])
+                print("Roll No:", student[2])
+                print("Course:", student[3])
+                print("-------------------")
+
     elif choice == "3":
-        search_student()
+        roll_no = input("Enter roll number to search: ")
+
+        student = database.search_student(roll_no)
+
+        if student:
+            print("\nStudent Found!")
+            print("ID:", student[0])
+            print("Name:", student[1])
+            print("Roll No:", student[2])
+            print("Course:", student[3])
+        else:
+            print("Student not found.")
+
     elif choice == "4":
         print("Thank you!")
         break
+
     else:
         print("Invalid choice.")
